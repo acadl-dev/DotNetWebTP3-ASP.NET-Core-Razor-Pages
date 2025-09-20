@@ -10,6 +10,11 @@ namespace CityBreaks.Web1.Data.Configurations
         {
             builder.Property(e => e.Id).HasColumnName("id_country");
             builder.Property(e => e.CountryName).HasMaxLength(50);
+            builder.HasData(new List<Country> {
+                new Country { Id = 1, CountryCode = "BR", CountryName = "Brasil"},
+                new Country { Id = 2, CountryCode = "AR", CountryName = "Argentina"},
+                new Country { Id = 3, CountryCode = "FR", CountryName = "França"}
+            });
 
         }
     }

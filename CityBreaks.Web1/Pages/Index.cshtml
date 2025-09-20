@@ -1,10 +1,43 @@
-﻿@page
+﻿@page "/"
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Lista de Cidades</h1>
 </div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Cidade</th>
+            <th>País</th>
+            <th>Propriedades</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var city in Model.Cities)
+        {
+            <tr>
+                <td>@city.Name</td>
+                <td>@city.Country?.CountryName</td>
+                <td>
+                    @if (city.Properties != null && city.Properties.Any())
+                    {
+                        <ul>
+                            @foreach (var property in city.Properties)
+                            {
+                                <li>@property.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>Sem propriedades cadastradas</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

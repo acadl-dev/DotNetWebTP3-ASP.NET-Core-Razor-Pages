@@ -1,4 +1,6 @@
 using CityBreaks.Web1.Data;
+using CityBreaks.Web1.Interfaces;
+using CityBreaks.Web1.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,9 @@ builder.Services.AddRazorPages();
 // Injeção de dependência
 builder.Services.AddDbContext<CityBreaksContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ICityService, CityService>();
+
 
 var app = builder.Build();
 

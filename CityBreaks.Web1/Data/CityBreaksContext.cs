@@ -20,8 +20,8 @@ namespace CityBreaks.Web1.Data
             
         }
 
-        DbSet<Country> Countries { get; set; }
-        DbSet<City> City { get; set; }
-        DbSet<City> Property { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<City> Property { get; set; }
     }
 }
