@@ -1,0 +1,184 @@
+﻿@page "/properties/filter"
+@model CityBreaks.Web1.Pages.FilterPropertiesModel
+@{
+    ViewData["Title"] = "Filtrar Propriedades";
+}
+
+
+<div class="container mt-4">
+    <!-- Título e Descrição -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>@ViewData["Title"]</h2>
+            <p class="text-muted">Use os filtros abaixo para encontrar propriedades específicas</p>
+        </div>
+    </div>
+
+    <!-- Formulário de Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Filtros de Busca
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <label asp-for="MinPrice" class="form-label">Preço Mínimo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input asp-for="MinPrice" class="form-control" placeholder="0,00" step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <label asp-for="MaxPrice" class="form-label">Preço Máximo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input asp-for="MaxPrice" class="form-control" placeholder="0,00" step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <label asp-for="CityName" class="form-label">Cidade</label>
+                                    <input asp-for="CityName" class="form-control" placeholder="Nome da cidade" />
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PropertyName" class="form-label">Nome da Propriedade</label>
+                                    <input asp-for="PropertyName" class="form-control" placeholder="Nome da propriedade" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="fas fa-search me-2"></i>Filtrar
+                                </button>
+                                <a asp-page="/Properties/Filter" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-2"></i>Limpar Filtros
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros Aplicados -->
+    @if (Model.HasFilters)
+    {
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Filtros aplicados:</strong> @Model.GetAppliedFiltersDescription()
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Resultados -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-home me-2"></i>Propriedades Encontradas
+                    </h5>
+                    <span class="badge bg-primary">@Model.Properties.Count resultado(s)</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.Properties.Any())
+                    {
+                        <div class="row">
+                            @foreach (var property in Model.Properties)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">@property.Name</h6>
+                                            <p class="card-text text-muted small mb-2">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                @property.City.Name, @property.City.Country.CountryName
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="h5 text-success mb-0">
+                                                    R$ @property.PricePerNight.ToString("F2")
+                                                    <small class="text-muted">/noite</small>
+                                                </span>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="/Properties/Details/@property.Id" class="btn btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="/Properties/Edit/@property.Id" class="btn btn-outline-secondary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Nenhuma propriedade encontrada</h5>
+                            @if (Model.HasFilters)
+                            {
+                                <p class="text-muted">Tente ajustar os filtros para encontrar mais resultados.</p>
+                                <a asp-page="/Properties/Filter" class="btn btn-outline-primary">
+                                    <i class="fas fa-times me-2"></i>Limpar Filtros
+                                </a>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Não há propriedades cadastradas no momento.</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Melhora a experiência do usuário com os campos de preço
+        document.addEventListener('DOMContentLoaded', function() {
+            const minPriceInput = document.querySelector('input[name="MinPrice"]');
+            const maxPriceInput = document.querySelector('input[name="MaxPrice"]');
+            
+            // Validação simples: preço mínimo não pode ser maior que máximo
+            function validatePrices() {
+                const minPrice = parseFloat(minPriceInput.value) || 0;
+                const maxPrice = parseFloat(maxPriceInput.value) || Number.MAX_VALUE;
+                
+                if (minPrice > maxPrice && maxPrice > 0) {
+                    maxPriceInput.setCustomValidity('O preço máximo deve ser maior que o mínimo');
+                } else {
+                    maxPriceInput.setCustomValidity('');
+                }
+            }
+            
+            minPriceInput?.addEventListener('change', validatePrices);
+            maxPriceInput?.addEventListener('change', validatePrices);
+        });
+    </script>
+}

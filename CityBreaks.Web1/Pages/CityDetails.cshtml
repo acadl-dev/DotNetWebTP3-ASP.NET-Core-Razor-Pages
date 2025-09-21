@@ -1,0 +1,30 @@
+﻿@page "{name}"
+@model CityBreaks.Web1.Pages.Index1Model
+@{
+    ViewData["Title"] = $"Detalhes da cidade {Model.City?.Name}";
+}
+
+@if (Model.City != null)
+{
+    <h2>@Model.City.Name</h2>
+    <p><strong>País:</strong> @Model.City.Country?.CountryName</p>
+
+    <h3>Propriedades</h3>
+    @if (Model.City.Properties != null && Model.City.Properties.Any())
+    {
+        <ul>
+            @foreach (var prop in Model.City.Properties)
+            {
+                <li>@prop.Id - @prop.Name</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Não há propriedades cadastradas para esta cidade.</p>
+    }
+}
+else
+{
+    <p>Cidade não encontrada.</p>
+}

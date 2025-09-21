@@ -17,9 +17,35 @@ namespace CityBreaks.Web1.Services
         public async Task<List<City>> GetAllAsync()
         {
             return await _context.City
-                .Include(c => c.Country)      // Inclui o país da cidade
-                .Include(c => c.Properties)   // Inclui as propriedades da cidade
+                .Include(c => c.Country)
+                .Select(c => new City
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    CountryId = c.CountryId,
+                    Country = c.Country,
+                    Properties = c.Properties
+                        .Where(p => p.DeletedAt == null) // 👈 só propriedades ativas
+                        .ToList()
+                })
                 .ToListAsync();
+        }
+
+        public async Task<City?> GetByNameAsync(string name)
+        {
+            return await _context.City
+                .Include(c => c.Country)
+                .Select(c => new City
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    CountryId = c.CountryId,
+                    Country = c.Country,
+                    Properties = c.Properties
+                        .Where(p => p.DeletedAt == null) // 👈 só propriedades ativas
+                        .ToList()
+                })
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
         }
     }
 }

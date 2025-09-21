@@ -13,6 +13,8 @@ builder.Services.AddDbContext<CityBreaksContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ICityService, CityService>();
+// Registra o serviço de propriedades
+builder.Services.AddScoped<IPropertyService, PropertyService>();
 
 
 var app = builder.Build();
